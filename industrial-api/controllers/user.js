@@ -1,3 +1,7 @@
+const { responseModel } = require('../models/response');
+const { IsIdPresent } = require('../validators/user');
+const UserTable = require('../models/user')
+
 // Temp code
 let users = [
     {
@@ -23,18 +27,36 @@ let users = [
 ];
 
 
-exports.getUsers = (req, res) => { res.send(users) }
-exports.getUserById = (req, res) => {
-    let user = users.find(u => u.id == req.params.id);
-    res.send(user);
+exports.getUsers = async (req, res) => {
+    responseModel(res, await UserTable.find(), null)
 }
+
+
+
+
+
+
+exports.getUserById = (req, res) => {
+    if (IsIdPresent(req.params)) {
+        let user = users.find(u => u.id == req.params.id);
+        responseModel(res, [user], null);
+    }
+    else {
+        responseModel(res, null, 'Id not Present')
+    }
+}
+
 exports.getUserByName = (req, res) => {
     let user = users.find(u => u.name == req.body.name);
     res.send(user);
 }
 
-exports.createUser = (req, res) => {
-    users.push(req.body);
+exports.createUser = async (req, res) => {
+    // users.push(req.body);
+
+    //Create User in DB
+    const user = new UserTable(req.body);
+    await user.save();
     res.send('user created');
 }
 

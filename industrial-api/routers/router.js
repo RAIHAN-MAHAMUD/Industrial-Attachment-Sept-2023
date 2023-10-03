@@ -29,7 +29,7 @@ router.route('/p/').get(getProductByName).post(createProduct)
 
 // router.put('/u/:id', updateUser)
 // router.delete('/u/:id', deleteUser)
-router.route('/u/:id').put(updateUser).delete(deleteUser)
+router.route('/u/:id').get(getUserById).put(updateUser).delete(deleteUser)
 router.route('/p/:id').put(updateProduct).delete(deleteProduct)
 
 
